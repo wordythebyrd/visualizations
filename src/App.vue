@@ -1,27 +1,27 @@
 <template>
   <v-app id="app">
-    <Header></Header>
+    <toolbar></toolbar>
     <v-content>
       <v-container fluid>
-        <img src="./assets/logo.png">
-        <Visualizations msg="vue.js and d3"/>
+        <!-- <img src="./assets/logo.png"> -->
+        <visualizations msg="vue.js and d3"/>
       </v-container>
     </v-content>
-    <Footer></Footer>
+    <layoutFooter></layoutFooter>
   </v-app>
 </template>
 
 <script>
-import Visualizations from './components/Visualizations.vue'
-import Header from './components/Header'
-import Footer from './components/Footer'
+import visualizations from './components/visualizations.vue'
+import toolbar from './components/toolbar'
+import layoutFooter from './components/layoutFooter'
 
 export default {
   name: 'app',
   components: {
-    Header,
-    Footer,
-    Visualizations
+    toolbar,
+    layoutFooter,
+    visualizations
   }
 }
 </script>

@@ -1,20 +1,24 @@
 <template>
   <div class="">
-    <div class="headline pb-3">{{ msg }}</div>
-    <transition-group name="list-complete" tag="p">
-      <span
-        v-for="item in items"
-        v-bind:key="item"
-        class="list-complete-item"
-      >
-        {{ item }}
-      </span>
-    </transition-group>
-    <v-btn class="primary" v-on:click="shuffle">Shuffle</v-btn>
-    <v-btn class="primary" v-on:click="order">Order</v-btn>
-    <v-btn class="secondary" v-on:click="add">Add</v-btn>
-    <v-btn class="accent" v-on:click="remove">Remove</v-btn>
-    <v-layout>
+    <v-layout row>
+      <v-flex xs12 sm4 offset-sm4>
+        <div class="headline pb-3">{{ msg }}</div>
+        <transition-group name="list-complete" tag="p">
+          <span
+            v-for="item in items"
+            v-bind:key="item"
+            class="list-complete-item"
+          >
+            {{ item }}
+          </span>
+        </transition-group>
+        <v-btn class="primary" v-on:click="shuffle">Shuffle</v-btn>
+        <v-btn class="primary" v-on:click="order">Order</v-btn>
+        <v-btn class="secondary" v-on:click="add">Add</v-btn>
+        <v-btn class="accent" v-on:click="remove">Remove</v-btn>
+      </v-flex>
+    </v-layout>
+    <v-layout row>
       <v-flex xs12 sm4 offset-sm4>
         <v-card>
           <v-card-title><h4>Array Summarizing</h4></v-card-title>
@@ -32,7 +36,18 @@
               <v-list-tile-content>Sum:</v-list-tile-content>
               <v-list-tile-content class="align-end">{{ sum }}</v-list-tile-content>
             </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content>Selected:</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ currentValue }}</v-list-tile-content>
+            </v-list-tile>
           </v-list>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <v-layout row>
+      <v-flex xs12 sm4 offset-sm4>
+        <v-card>
+          <area-chart @select="onSelect" class="area-chart" :data="items" :ceil="30"></area-chart>
         </v-card>
       </v-flex>
     </v-layout>
@@ -40,14 +55,18 @@
 </template>
 
 <script>
-import * as d3 from "d3";
+import areaChart from './areaChart';
 
 export default {
-  name: "Visualizations",
+  name: "visualizations",
+  components: {
+    areaChart
+  },
   data() {
     return {
       items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-      nextNum: 10
+      nextNum: 10,
+      currentValue: null
     };
   },
   props: {
@@ -55,16 +74,19 @@ export default {
   },
   computed: {
     min() {
-      return d3.min(this.items);
+      return this.$d3.min(this.items);
     },
     max() {
-      return d3.max(this.items);
+      return this.$d3.max(this.items);
     },
     sum() {
-      return d3.sum(this.items);
+      return this.$d3.sum(this.items);
     }
   },
   methods: {
+    onSelect(value) {
+      this.currentValue = value;
+    },
     randomIndex: function() {
       return Math.floor(Math.random() * this.items.length);
     },
@@ -112,5 +134,8 @@ a {
 }
 .list-complete-leave-active {
   position: absolute;
+}
+.area-chart {
+  height: 100px
 }
 </style>
